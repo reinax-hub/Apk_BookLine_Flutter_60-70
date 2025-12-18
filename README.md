@@ -93,9 +93,6 @@ Desain antarmuka aplikasi mengacu pada **Book Grocer App Design** karya **Blake 
 🔗 Referensi desain:
 [https://www.behance.net/gallery/83678145/Book-Grocer-App-Design-Free-Bookstore-XD-UI-Kit](https://www.behance.net/gallery/83678145/Book-Grocer-App-Design-Free-Bookstore-XD-UI-Kit)
 
-### Klarifikasi
-
-* Template GitHub **bukan** template Flutter UI
-* Tidak terdapat repository GitHub resmi dari pembuat desain
-* Implementasi UI dibuat ulang menggunakan Flutter
-* Proyek ini bersifat pembelajaran dan non-komersial
+Aplikasi BookLine Di kembangkan dari Book Grocer oleh 
+1. Rahayu Eriyana 
+2. Wijayaning Dewi Ramadhani https://github.com/dewii8
