@@ -24,11 +24,14 @@ class _SearchViewState extends State<SearchView> {
   final List<String> genreTabs = [
     "Semua",
     "Fantasi",
-    "Romance",
-    "Comedy",
-    "Horror",
-    "Mystery",
-    "Fiksi",
+      "Romance",
+      "Inspiratif",
+      "Horror",
+      "Misteri",
+      "Fiksi",
+      "Sastra",
+      "Sejarah",
+      "Biografi",
   ];
 
   @override

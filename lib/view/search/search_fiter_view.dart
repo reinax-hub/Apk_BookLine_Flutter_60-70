@@ -21,10 +21,13 @@ class _SearchFilterViewState extends State<SearchFilterView> {
   final List<String> genreArr = [
     "Fantasi",
     "Romance",
-    "Comedy",
+    "Inspiratif",
     "Horror",
-    "Mystery",
+    "Misteri",
     "Fiksi",
+    "Sastra",
+    "Sejarah",
+    "Biografi",
   ];
 
   final List<double> ratingArr = [5, 4, 3, 2, 1];

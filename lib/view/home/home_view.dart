@@ -30,7 +30,7 @@ class _HomeViewState extends State<HomeView> {
   final List bestArr = BookData.allBooks;
   
   // Genre yang akan ditampilkan (setiap genre menampilkan 3 buku)
-  final List<String> genreList = ["Fantasi", "Romance", "Mystery", "Thriller", "Science Fiction"];
+  final List<String> genreList = ["Fantasi", "Romance", "Misteri", "Inspiratif", "Fiksi","Sastra","Sejarah","Biografi","Horror"];
   
   // Recently Viewed - ambil dari allBooks jika recentBooks kosong
   late final List recentArr;

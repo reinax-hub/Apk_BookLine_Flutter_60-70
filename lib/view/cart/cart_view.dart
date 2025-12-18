@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../common/color_extenstion.dart';
 import '../data/dummy/book_data.dart';
+import '../data/dummy/cart_data.dart';
 import '../data/dummy/book_detail_view.dart';
 
 class CartView extends StatefulWidget {
@@ -11,9 +12,7 @@ class CartView extends StatefulWidget {
 }
 
 class _CartViewState extends State<CartView> {
-  List<Map<String, dynamic>> cartBooks = [
-    {"id": 1, "qty": 1},
-  ];
+  List<Map<String, dynamic>> cartBooks = CartData.cartBooks;
 
  int get totalPrice {
   int total = 0;
@@ -46,7 +45,6 @@ class _CartViewState extends State<CartView> {
         ),
         backgroundColor: TColor.primary,
       ),
-
       body: cartBooks.isEmpty
           ? _emptyCart()
           : Column(
@@ -71,194 +69,98 @@ class _CartViewState extends State<CartView> {
     );
   }
 
-  // ===========================
-  // CART ITEM CARD
-  // ===========================
   Widget _cartItem(
       Map<String, dynamic> book, Map<String, dynamic> item, int index) {
-    final int itemTotal = book["price"] * item["qty"];
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => BookDetailView(book: book),
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, 4),
-            )
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// COVER
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                book["img"],
-                width: 90,
-                height: 130,
-                fit: BoxFit.cover,
-              ),
-            ),
-
-            const SizedBox(width: 14),
-
-            /// INFO
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    book["name"],
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-
-                  const SizedBox(height: 4),
-
-                  Text(
-                    book["author"],
-                    style: TextStyle(
-                      color: TColor.subTitle,
-                      fontSize: 13,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Row(
-                    children: [
-                      const Icon(Icons.star,
-                          color: Colors.orange, size: 16),
-                      const SizedBox(width: 4),
-                      Text(book["rating"].toString()),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Text(
-                    "Rp ${book["price"]}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: TColor.primary,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  /// QTY
-                  Row(
-                    children: [
-                      _qtyButton(
-                        icon: Icons.remove,
-                        onTap: () {
-                          if (item["qty"] > 1) {
-                            setState(() => item["qty"]--);
-                          }
-                        },
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          item["qty"].toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      _qtyButton(
-                        icon: Icons.add,
-                        onTap: () {
-                          setState(() => item["qty"]++);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            /// DELETE
-            IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: () {
-                setState(() => cartBooks.removeAt(index));
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ===========================
-  // CHECKOUT SECTION
-  // ===========================
-  Widget _checkoutSection() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, -3),
+            blurRadius: 8,
+            offset: Offset(0, 4),
           )
         ],
       ),
       child: Row(
+        children: [
+          Image.asset(book["img"], width: 90, height: 130, fit: BoxFit.cover),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(book["name"],
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 6),
+                Text("Rp ${book["price"]}",
+                    style: TextStyle(
+                        color: TColor.primary,
+                        fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    _qtyButton(
+                      icon: Icons.remove,
+                      onTap: () {
+                        if (item["qty"] > 1) {
+                          setState(() => item["qty"]--);
+                        }
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(item["qty"].toString()),
+                    ),
+                    _qtyButton(
+                      icon: Icons.add,
+                      onTap: () {
+                        setState(() => item["qty"]++);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: () {
+              setState(() {
+                CartData.removeFromCart(book["id"]);
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _checkoutSection() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Total"),
-              Text(
-                "Rp $totalPrice",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: TColor.primary,
-                ),
-              ),
-            ],
+          Text(
+            "Total: Rp $totalPrice",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: TColor.primary,
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: TColor.primary,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 26, vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
             ),
             onPressed: () {},
-            child: const Text(
-              "Checkout",
-              style: TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          )
+            child: const Text("Checkout",
+                style: TextStyle(color: Colors.white)),
+          ),
         ],
       ),
     );
@@ -282,10 +184,7 @@ class _CartViewState extends State<CartView> {
     return Center(
       child: Text(
         "Keranjang masih kosong",
-        style: TextStyle(
-          color: TColor.subTitle,
-          fontSize: 16,
-        ),
+        style: TextStyle(color: TColor.subTitle),
       ),
     );
   }

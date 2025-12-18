@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../../common/color_extenstion.dart';
 import '../data/dummy/wishlist_data.dart';
+import '../data/dummy/cart_data.dart';
+import '../cart/cart_view.dart';
 
 class BookReadingView extends StatefulWidget {
   final Map<String, dynamic> bObj;
@@ -60,6 +62,17 @@ class _BookReadingViewState extends State<BookReadingView> {
                   },
                 ),
                 IconButton(
+                  icon: Icon(Icons.shopping_cart, color: TColor.primary),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const CartView(),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
                   icon: Icon(Icons.settings, color: TColor.primary),
                   onPressed: () => _openSetting(context),
                 ),
@@ -102,7 +115,7 @@ class _BookReadingViewState extends State<BookReadingView> {
               ),
               const Spacer(),
 
-              /// ❤️ LOVE BUTTON
+              /// LOVE
               IconButton(
                 icon: Icon(
                   isLoved ? Icons.favorite : Icons.favorite_border,
@@ -132,11 +145,41 @@ class _BookReadingViewState extends State<BookReadingView> {
 
           const SizedBox(height: 15),
 
+          /// 🛒 ADD TO CART BUTTON
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: TColor.primary,
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            icon: const Icon(Icons.shopping_cart, color: Colors.white),
+            label: const Text(
+              "Add to Cart",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () {
+              CartData.addToCart(widget.bObj["id"]);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Buku ditambahkan ke keranjang"),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            },
+          ),
+
+          const SizedBox(height: 15),
+
           Expanded(
             child: SingleChildScrollView(
               child: SelectableText(
-                widget.bObj["synopsis"] ??
-                    "Sinopsis belum tersedia.",
+                widget.bObj["synopsis"] ?? "Sinopsis belum tersedia.",
                 style: TextStyle(
                   color: isDark ? Colors.white : TColor.text,
                   fontSize: fontSize,
